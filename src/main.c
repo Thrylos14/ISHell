@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <windows.h>
 #include "command.h"
 #include "parser.h"
 
@@ -44,7 +45,7 @@ void launchShellInstance() {
 
   while (!exitFlag) {
 
-  printf("%s", defaultPrompt);
+  printf("%s ", defaultPrompt);
 
     token = strip(fgets(buffer, sizeof(buffer), stdin));
     parseCommand(token, argv);
@@ -52,15 +53,15 @@ void launchShellInstance() {
     switch (resolveCommand(argv[0]))
     {
     case CMD_START:
-        printf("Start\n");
+        printf("Start.\n");
         break;
     
     case CMD_STOP:
-        printf("Stop\n");
+        printf("Stop.\n");
         break;
     
     case CMD_UNKNOWN:
-      printf("Unknow command entered\n");
+      printf("Unknown command entered.\n");
       break;
     
     case CMD_EXIT:
@@ -71,6 +72,11 @@ void launchShellInstance() {
 }
 
 int main(int argc, char* argv[]) {
+
+  // forces windows terminals to use UTF-8 (allows ❯ to render properly)
+  SetConsoleOutputCP(CP_UTF8);
+  SetConsoleCP(CP_UTF8);
+ 
   if (argc >= 2) {
       printf("The command %s takes no arguments.\n", argv[0]);
       return 1;

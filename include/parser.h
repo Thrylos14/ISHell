@@ -1,13 +1,6 @@
-#include <string.h>
+#ifndef PARSER_H
+#define PARSER_H
 
-void parseCommand(char *input, char *argv[]) 
-{
-    int argc = 0;
-  
-    char *token = strtok(input, " "); // replaces first " " with "\0" and returns pointer to the start of input
+void parseCommand(char *input, char *argv[]);
 
-    while (token) {
-        argv[argc++] = token; // assigns the pointer to argv[argc] 
-        token = strtok(NULL, " "); // returns pointer from after the previous replacement. works because strtok internally stores nextPosition
-    }
-}
+#endif

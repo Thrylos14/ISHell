@@ -1,22 +1,13 @@
-#include <stdio.h>
-#include <string.h>
+#ifndef COMMAND_H
+#define COMMAND_H
 
-enum Command 
-{
+typedef enum  {
   CMD_UNKNOWN,
   CMD_START,
   CMD_STOP,
   CMD_EXIT
-};
+} Command;
 
-enum Command resolveCommand(char *input) {
-  if (!strcmp("start", input))
-    return CMD_START;
-  
-  if (!strcmp("stop", input))
-    return CMD_STOP;
-  
-  if (!strcmp("exit", input))
-    return CMD_EXIT;
-  return CMD_UNKNOWN;
-}
+Command resolveCommand(char *input);
+
+#endif
