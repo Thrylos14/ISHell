@@ -1,7 +1,7 @@
 #include <string.h>
 #include "parser.h"
 
-void parse_command(char *input, char *argv[]) 
+void parse_command(char *input, char **argv) 
 {
     int argc = 0;
     

@@ -57,7 +57,7 @@ void launch_shell_instance() {
     }
 }
 
-int main(int argc, char* argv[]) {
+int main(int argc, char **argv) {
 
     // forces windows terminals to use UTF-8 (allows ❯ to render properly)
     SetConsoleOutputCP(CP_UTF8);
