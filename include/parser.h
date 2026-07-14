@@ -1,6 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-void parseCommand(char *input, char *argv[]);
+void parse_command(char *input, char *argv[]);
 
 #endif

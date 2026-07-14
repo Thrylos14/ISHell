@@ -1,10 +1,10 @@
 #include <string.h>
 #include "parser.h"
 
-void parseCommand(char *input, char *argv[]) 
+void parse_command(char *input, char *argv[]) 
 {
     int argc = 0;
-  
+    
     char *token = strtok(input, " "); // replaces first " " with "\0" and returns pointer to the start of input
 
     while (token) {

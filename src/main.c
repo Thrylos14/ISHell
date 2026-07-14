@@ -1,88 +1,74 @@
 #include <stdio.h>
 #include <windows.h>
-#include "command.h"
 #include "parser.h"
+#include "builtin.h"
 
-// enum Command
-// {
-//   CMD_UNKNOWN;
-//   CMD_START;
-//   CMD_STOP;
-// };
+char* strip(char *str) {
+    if (str == NULL)
+        return NULL;
 
-// enum Command parseCommand(char *input) {
-//   if (!strcmp("start", input)) {
-//     printf("Starting")
-//   }
-// }
-
-char* strip(char *input) {
-  if (input == NULL)
-    return NULL;
-
-  // 1. Remove leading newlines by advancing the pointer.
-  while (*input == '\n' || *input == '\r') {
-    input++;
-  }
-
-  // 2. Remove trailing newlines by truncating string.
-  size_t len = strlen(input);
-
-  while (len > 0 && (input[len - 1] == '\n' || input[len - 1] == '\r')) {
-    input[len - 1] = '\0';
-    len--;
-  }
-
-  return input;
-}
-
-void launchShellInstance() {
-	char *defaultPrompt = "❯";
-	char *token;
-	char buffer[256];
-	char *argv[256];
-	int exitFlag = 0;
-
-  while (!exitFlag) {
-
-  printf("%s ", defaultPrompt);
-
-    token = strip(fgets(buffer, sizeof(buffer), stdin));
-    parseCommand(token, argv);
-
-    switch (resolveCommand(argv[0]))
-    {
-    case CMD_START:
-        printf("Start.\n");
-        break;
-    
-    case CMD_STOP:
-        printf("Stop.\n");
-        break;
-    
-    case CMD_UNKNOWN:
-      printf("Unknown command entered.\n");
-      break;
-    
-    case CMD_EXIT:
-      exitFlag = 1;
+    // 1. Remove leading newlines by advancing the pointer.
+    while (*str == '\n' || *str == '\r') {
+        str++;
     }
 
-	}
+    // 2. Remove trailing newlines by truncating string.
+    size_t len = strlen(str);
+
+    while (len > 0 && (str[len - 1] == '\n' || str[len - 1] == '\r')) {
+        str[len - 1] = '\0';
+        len--;
+    }
+
+    return str;
+}
+
+void launch_shell_instance() {
+	
+    int command_not_found;
+    char *default_prompt = "❯";
+	char *token;
+    char buffer[256];
+	char *argv[256];
+
+    while (1) {
+
+        command_not_found = 1;
+        printf("%s ", default_prompt);
+
+        token = strip(fgets(buffer, sizeof(buffer), stdin));
+        parse_command(token, argv);
+
+        for (int i = 0; i < builtin_count; i++) {
+
+            if (!strcmp(argv[0], builtins[i].name)) {
+                
+                int argc = sizeof(argv);
+                builtins[i].func(argc, argv);
+                
+                command_not_found = 0;
+                break;
+            }
+        }
+
+        if (command_not_found)
+            printf("\033[1;31mError:\033[0m Command \033[1;33m%s\033[0m not found.\n", argv[0]);
+        
+    }
 }
 
 int main(int argc, char* argv[]) {
 
-  // forces windows terminals to use UTF-8 (allows ❯ to render properly)
-  SetConsoleOutputCP(CP_UTF8);
-  SetConsoleCP(CP_UTF8);
+    // forces windows terminals to use UTF-8 (allows ❯ to render properly)
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
  
-  if (argc >= 2) {
-      printf("The command %s takes no arguments.\n", argv[0]);
-      return 1;
-  }
-  
-  launchShellInstance();
-  
-  return 0;
+    if (argc > 1) {
+        printf("The command %s takes no arguments.\n", argv[0]);
+        return 1;
+    }
+    
+    launch_shell_instance();
+    
+    return 0;
 }
