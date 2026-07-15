@@ -18,14 +18,17 @@ OBJECTS = $(SRC:src/%.c=build/%.o) \
 			$(BUILTINS:builtin/%.c=build/%.o)
 
 
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) | $(dir $(OBJECTS))
 	$(CC) $(OBJECTS) -o $@
 
-build/%.o: src/%.c include/parser.h
+build/%.o: src/%.c include/parser.h | $(dir $(OBJECTS))
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/%.o: builtin/%.c include/builtin.h
+build/%.o: builtin/%.c include/builtin.h | $(dir $(OBJECTS))
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f build/*.o build/ISHell.exe
+
+%/:
+	mkdir "$@"
