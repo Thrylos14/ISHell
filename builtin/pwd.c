@@ -3,6 +3,9 @@
 #include <stdio.h>
 
 int builtin_pwd(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
+    
     char cwd[PATH_MAX];
     
     if (!_getcwd(cwd, sizeof(cwd))) {

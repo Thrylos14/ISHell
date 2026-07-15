@@ -1,6 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
 
+TARGET = build/ISHell.exe
+
 SRC = \
 	src/main.c \
 	src/parser.c
@@ -16,7 +18,7 @@ OBJECTS = $(SRC:src/%.c=build/%.o) \
 			$(BUILTINS:builtin/%.c=build/%.o)
 
 
-build/ISHell: $(OBJECTS)
+$(TARGET): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@
 
 build/%.o: src/%.c include/parser.h

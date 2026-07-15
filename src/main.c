@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <windows.h>
+#include <string.h>
 #include "parser.h"
 #include "builtin.h"
 
-char* strip(char *str) {
+static char *strip(char *str) {
     if (str == NULL)
         return NULL;
 
@@ -15,7 +16,7 @@ char* strip(char *str) {
     // 2. Remove trailing newlines by truncating string.
     size_t len = strlen(str);
 
-    while (len > 0 && (str[len - 1] == '\n' || str[len - 1] == '\r')) {
+    while (len > 0 && (str[len - 1] == '\n' || str[len - 1] == '\r' || str[len-1] == '\t')) {
         str[len - 1] = '\0';
         len--;
     }
@@ -27,9 +28,10 @@ void launch_shell_instance() {
 	
     int command_not_found;
     char *default_prompt = "❯";
-	char *token;
+    char *token;
     char buffer[256];
-	char *argv[256];
+    char *argv[256];
+    int argc;
 
     while (1) {
 
@@ -37,13 +39,14 @@ void launch_shell_instance() {
         printf("%s ", default_prompt);
 
         token = strip(fgets(buffer, sizeof(buffer), stdin));
-        parse_command(token, argv);
+        argc = parse_command(token, argv);
+
+        if (argc == 0)
+            continue;
 
         for (int i = 0; i < builtin_count; i++) {
 
             if (!strcmp(argv[0], builtins[i].name)) {
-                
-                int argc = sizeof(argv);
                 builtins[i].func(argc, argv);
                 
                 command_not_found = 0;

@@ -13,6 +13,6 @@ typedef struct {
     BuiltinFunc func;
 } BuiltinCommand;
 
-extern const BuiltinCommand builtins[4];
+extern const BuiltinCommand builtins[];
 extern const int builtin_count;
 #endif

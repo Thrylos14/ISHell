@@ -1,7 +1,7 @@
 #include <string.h>
 #include "builtin.h"
 
-const BuiltinCommand builtins[4] = {
+const BuiltinCommand builtins[] = {
     {"cd", builtin_cd},
     {"pwd",builtin_pwd},
     {"clear", builtin_clear},

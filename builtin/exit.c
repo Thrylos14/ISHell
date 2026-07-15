@@ -1,5 +1,8 @@
-#include <stdlib.h> 
+#include <stdlib.h>
+#include <stdnoreturn.h>
 
-int builtin_exit(int argc, char **argv) {
+noreturn int builtin_exit(int argc, char **argv) {
+    (void)argc;
+    (void)argv;
     exit(0);
 }
